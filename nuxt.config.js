@@ -1,4 +1,5 @@
 const pkg = require('./package')
+require('dotenv').config()
 const Spotify = require('spotify-web-api-js');
 const spotifyApi = new Spotify();
 
@@ -23,7 +24,7 @@ module.exports = {
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#fff' },
+  loading: { color: '#000' },
 
   /*
   ** Global CSS
@@ -45,6 +46,7 @@ module.exports = {
   modules: [
     // Doc: https://github.com/nuxt-community/axios-module#usage
     '@nuxtjs/axios',
+    '@nuxtjs/dotenv',
   ],
   /*
   ** Axios module configuration

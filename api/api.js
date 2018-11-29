@@ -15,7 +15,7 @@ function makeid() {
 
 app.get('/', (req, res) => {
   var state = makeid();
-  var client_id = '9a333a851cfc43fea08a9007edaf29bf';
+  var client_id = process.env.CLIENT_ID;
   // res.cookie(stateKey, state);
   var scope = 'user-read-private user-read-email'
   res.redirect('https://accounts.spotify.com/authorize?' +
@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
       response_type: 'code',
       client_id: client_id,
       scope: scope,
-      redirect_uri: 'http://localhost:3000/api/callback',
+      redirect_uri: process.env.BASE_URL + '/api/callback',
       state: state
       })
     );
@@ -35,11 +35,11 @@ app.get('/callback', (req, res) => {
     url: 'https://accounts.spotify.com/api/token',
     form: {
       code: req.query.code,
-      redirect_uri: "http://localhost:3000/api/callback",
-      grant_type: "authorization_code",
+      redirect_uri: process.env.BASE_URL + '/api/callback',
+      grant_type: 'authorization_code',
     },
     headers: {
-      'Authorization': 'Basic ' + (new Buffer('9a333a851cfc43fea08a9007edaf29bf:5410629eb14849819358b24e6dd90b39').toString('base64'))
+      'Authorization': 'Basic ' + (new Buffer.from(process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET).toString('base64'))
     },
     json: true
   };
@@ -48,7 +48,7 @@ app.get('/callback', (req, res) => {
       "access_token": body.access_token,
       "refresh_token": body.refresh_token
     });
-    res.redirect('http://localhost:3000/callback?' + query);
+    res.redirect(process.env.BASE_URL + '/callback?' + query);
   });
 })
 
