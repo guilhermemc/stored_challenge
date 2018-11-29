@@ -1,23 +1,37 @@
 <template>
   <section class="container">
-    {{token}}
+    weoprwopejrowpejropwW
+    {{accessToken}}
   </section>
 </template>
 
 <script>
+
+
 import {mapMutations, mapGetters, mapActions} from 'vuex'
+const Spotify = require('spotify-web-api-js');
+const spotifyApi = new Spotify();
 
 export default {
     computed: {
         ...mapGetters([
-            'token',
+            'accessToken',
+            'refreshToken',
         ])
     },
     methods : {
-        ...mapMutations(['SET_TOKEN'])
+        ...mapMutations(['SET_ACCESS_TOKEN','SET_REFRESH_TOKEN']),
     },
     mounted () {
-        this.SET_TOKEN(this.$route.query.code)
+      console.log(this.$route.query.access_token)
+        this.SET_ACCESS_TOKEN(this.$route.query.access_token)
+        this.SET_REFRESH_TOKEN(this.$route.query.refresh_token)
+        console.log(spotifyApi.setAccessToken(this.$route.query.access_token));
+
+        spotifyApi.getArtistAlbums('43ZHCT0cAZBISjO8DG9PnE', function(err, data) {
+            if (err) console.error(err);
+            else console.log('Artist albums', data);
+        });
     }
 }
 </script>

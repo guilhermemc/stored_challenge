@@ -5,22 +5,26 @@ const createStore = () => {
 
   return new Vuex.Store({
     state: () => ({
-      token: null
+      accessToken: null,
+      refreshToken: null
     }),
 
     mutations: {
-      SET_TOKEN (state, payload) {
-        console.log(payload)
-        state.token = payload
+      SET_ACCESS_TOKEN (state, payload) {
+        state.accessToken = payload
+      },
+      SET_REFRESH_TOKEN (state, payload) {
+        state.refreshToken = payload
       }
     },
     
     actions: {
-        
+      
     },
 
     getters:{
-      token: state => state.token
+      accessToken: state => state.accessToken,
+      refreshToken: state => state.refreshToken
     }
   })
 }

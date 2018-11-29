@@ -1,4 +1,6 @@
 const pkg = require('./package')
+const Spotify = require('spotify-web-api-js');
+const spotifyApi = new Spotify();
 
 module.exports = {
   mode: 'universal',
@@ -42,7 +44,7 @@ module.exports = {
   */
   modules: [
     // Doc: https://github.com/nuxt-community/axios-module#usage
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
   ],
   /*
   ** Axios module configuration
