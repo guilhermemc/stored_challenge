@@ -1,36 +1,19 @@
 <template>
-    <div>
-        <!-- <el-table
-            ref="singleTable"
-            :data="paginatedData"
-            stripe
-            highlight-current-row
-            @current-change="selectPlaylist"
-            style="width: 100%">
-            <el-table-column
-                prop="owner.display_name"
-                label="Proprietário">
-                </el-table-column>
-                <el-table-column
-                prop="name"
-                label="Nome">
-            </el-table-column>
-        </el-table> -->
-        <el-row type="flex wrap" class="row-bg" justify="space-around">
-            <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6" v-for="o in paginatedData" :key="o.id" :offset="1">
+    <div class="list">
+        <el-row type="flex wrap" class="row-bg" justify="space-around"  :gutter="20">
+            <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8" v-for="o in paginatedData" :key="o.id">
                 <el-card class="card-playlist" :body-style="{ padding: '0px' }" >
                 <img :src="o.images[0].url" class="image">
                 <div style="padding: 14px;">
                     <span>{{o.name}}</span>
                     <div class="bottom clearfix">
                     <time class="time">{{ o.owner.display_name }}</time>
-                    <el-button type="text" class="button">Operating button</el-button>
                     </div>
                 </div>
                 </el-card>
             </el-col>
         </el-row>
-        <el-button-group>
+        <el-button-group class="center">
             <el-button type="primary" icon="el-icon-arrow-left"  @click="prevPage" :disabled="pageNumber==0">Previous Page</el-button>
             <el-button type="primary" @click="nextPage" :disabled="pageNumber > pageCount -1">Next Page<i class="el-icon-arrow-right el-icon-right"></i></el-button>
         </el-button-group>
@@ -53,7 +36,7 @@ export default {
         size:{
             type:Number,
             required:false,
-            default: 10
+            default: 6
         }
     },
     computed: {
@@ -82,6 +65,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.list {
+    margin: 25px;
+}
  .el-row {
     margin-bottom: 20px;
     &:last-child {
@@ -118,7 +104,11 @@ export default {
       clear: both
   }
   .card-playlist {
-      min-height: 260px;
+      min-height: 280px;
       margin-bottom: 15px;
+  }
+  .center {
+      display: flex;
+      justify-content: center;
   }
 </style>

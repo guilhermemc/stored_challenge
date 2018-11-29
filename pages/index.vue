@@ -18,7 +18,7 @@
       </el-col>
       <el-col :span="24">
         <a href="http://localhost:3000/api">
-          <el-button type="success">Entrar</el-button>
+          <el-button type="success">Let's go!</el-button>
         </a>
       </el-col>
     </div>

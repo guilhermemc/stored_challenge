@@ -1,10 +1,24 @@
 <template>
-  <div>
+  <div id="app">
+    <alert/>
     <nuxt/>
   </div>
 </template>
+<script>
+  import Alert from "~/components/Alert.vue";
+  import PaginatedList from '~/components/PaginatedList.vue'
 
-<style>
+  export default {
+    components: {
+      Alert
+    }
+  }
+</script>
+
+<style lang="scss">
+#app {
+  padding: 25px;
+}
 html {
   font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
     Roboto, 'Helvetica Neue', Arial, sans-serif;

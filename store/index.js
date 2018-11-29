@@ -12,9 +12,11 @@ const createStore = () => {
 
     mutations: {
       SET_ACCESS_TOKEN (state, payload) {
+        localStorage.setItem('accessToken', payload);
         state.accessToken = payload
       },
       SET_REFRESH_TOKEN (state, payload) {
+        localStorage.setItem('refreshToken', payload);
         state.refreshToken = payload
       },
       SET_PLAYLISTS (state, payload) {
