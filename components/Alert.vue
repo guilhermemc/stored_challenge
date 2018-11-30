@@ -1,28 +1,20 @@
 <template>
     <div>
-        <el-row type="flex" class="row-bg" justify="center">
+        <el-row type="flex" class="row-bg row-alert" justify="center">
             <el-col :span="16">
                 <el-alert v-show="display" :type="type" show-icon :title="text"></el-alert>
             </el-col>
         </el-row>
     </div>
-     <!-- @close="callback" -->
 </template>
 <script>
 export default {
     data() {
         return {
             display: false,
-            type:'success',
-            text:'Title',
+            type:'',
+            text:'',
         }
-    },
-    props:{
-        
-    },
-
-    methods : {
-
     },
     created() {
         this.$nuxt.$on('SHOW_ALERT', data => {
@@ -37,5 +29,8 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-
+    .row-alert {
+        position: absolute;
+        z-index: 2
+    }
 </style>

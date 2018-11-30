@@ -13,7 +13,7 @@ export default {
   mounted () {
     this.SET_ACCESS_TOKEN(this.$route.query.access_token)
     this.SET_REFRESH_TOKEN(this.$route.query.refresh_token)
-    this.$router.push('/playlist');
+    this.$router.push('/playlists');
   }
 }
 </script>

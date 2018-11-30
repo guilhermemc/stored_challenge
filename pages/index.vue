@@ -17,7 +17,7 @@
       </h2>
       </el-col>
       <el-col :span="24">
-        <a href="http://localhost:3000/api">
+        <a :href="linkApi">
           <el-button type="success">Let's go!</el-button>
         </a>
       </el-col>
@@ -27,7 +27,11 @@
 
 <script>
 export default {
-
+  data() {
+    return {
+      linkApi : process.env.BASE_URL +'/api'
+    }
+  }
 }
 </script>
 

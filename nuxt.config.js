@@ -1,4 +1,5 @@
 const pkg = require('./package')
+var moment = require('moment');
 require('dotenv').config()
 const Spotify = require('spotify-web-api-js');
 const spotifyApi = new Spotify();
@@ -37,7 +38,7 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '@/plugins/element-ui',    
+    '@/plugins/element-ui',
   ],
 
   /*

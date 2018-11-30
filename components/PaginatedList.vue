@@ -1,31 +1,37 @@
 <template>
     <div class="list">
-        <el-row type="flex wrap" class="row-bg" justify="space-around"  :gutter="20">
-            <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8" v-for="o in paginatedData" :key="o.id">
-                <el-card class="card-playlist" :body-style="{ padding: '0px' }" >
-                <img :src="o.images[0].url" class="image">
-                <div style="padding: 14px;">
-                    <span>{{o.name}}</span>
-                    <div class="bottom clearfix">
-                    <time class="time">{{ o.owner.display_name }}</time>
+        <el-row type="flex wrap" class="row-bg" style="display: flex; flex-wrap: wrap;" justify="space-around" :gutter="20">
+            <el-col class="col-card" :xs="24" :sm="8" :md="8" :lg="8" :xl="8" v-for="playlist in paginatedData" :key="playlist.id">
+                <el-card class="card-playlist" :body-style="{ padding: '0px' }" v-on:click.native="getTracks(playlist.id)">
+                    <img :src="playlist.images[0].url" class="image">
+                    <div style="padding: 14px;">
+                        <span>{{playlist.name}}</span>
+                        <div class="bottom clearfix">
+                        <span class="time">{{ playlist.owner.display_name }}</span>
+                        </div>
                     </div>
-                </div>
                 </el-card>
             </el-col>
         </el-row>
         <el-button-group class="center">
-            <el-button type="primary" icon="el-icon-arrow-left"  @click="prevPage" :disabled="pageNumber==0">Previous Page</el-button>
-            <el-button type="primary" @click="nextPage" :disabled="pageNumber > pageCount -1">Next Page<i class="el-icon-arrow-right el-icon-right"></i></el-button>
+            <el-button type="primary" icon="el-icon-arrow-left"  @click="prevPage" :disabled="pageNumber==0">
+                Previous Page
+            </el-button>
+            <el-button type="primary" @click="nextPage" :disabled="pageNumber > pageCount -1">
+                Next Page
+                <i class="el-icon-arrow-right el-icon-right"></i>
+            </el-button>
         </el-button-group>
-
     </div>
 </template>
 <script>
+import {mapMutations, mapActions} from 'vuex'
+const Spotify = require('spotify-web-api-js');
+const spotifyApi = new Spotify();
 export default {
     data() {
         return {
             pageNumber: 0,
-            currentDate: new Date()
         }
     },
     props:{
@@ -52,14 +58,15 @@ export default {
         }
     },
     methods : {
+        ...mapMutations(['SET_TRACKS']),
         nextPage(){
             this.pageNumber++;
         },
         prevPage(){
             this.pageNumber--;
         },
-        selectPlaylist(data) {
-            console.log(data)
+        getTracks(playlistId) {
+            this.$router.push('playlists/'+playlistId+'/tracks');
         }
     },
 }
@@ -104,8 +111,13 @@ export default {
       clear: both
   }
   .card-playlist {
-      min-height: 280px;
-      margin-bottom: 15px;
+    height: 100%;
+    cursor: pointer;
+  }
+  .col-card{
+    flex: 1 0 33%;
+    align-items: stretch;
+    margin-bottom: 15px;
   }
   .center {
       display: flex;
