@@ -1,5 +1,12 @@
 <template>
     <section class="container margin-15-0">
+        <el-row type="flex" class="row-bg" justify="space-around">
+            <el-col :span="22">
+                <el-button class="right" type="success" icon="el-icon-plus" @click="showAddTracks = true">
+                     Add Track
+                </el-button>
+            </el-col>
+        </el-row>
         <el-row type="flex" class="row-bg" justify="center">
             <el-col :span="22">
                 <div class="margin-15-0">
@@ -42,6 +49,41 @@
                 </div>
             </el-col>
         </el-row>
+        <el-dialog
+            title="Add Track to Playlist"
+            :visible.sync="showAddTracks"
+            width="70%">
+            <input type="text" v-model="trackName" v-on:keyup="querySearchAsync">
+            <div>
+                <el-table
+                        stripe
+                        row-key="id"
+                        :data="suggestionTracks"
+                        style="width: 100%">
+                        <el-table-column
+                            label="Name"
+                            prop="name">
+                        </el-table-column>
+                        <el-table-column
+                        label="Artists">
+                            <template slot-scope="scope">
+                                <div slot="reference" class="name-wrapper">
+                                    {{ getArtists(scope.row.artists) }}
+                                </div>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                            align="right">
+                            <template slot-scope="scope">
+                                <el-button size="mini" type="success" icon="el-icon-check" plain round @click="addTrack(scope.$index, scope.row)">Add</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="showAddTracks = false">Done</el-button>
+            </span>
+        </el-dialog>
     </section>  
 </template>
 <script>
@@ -55,7 +97,10 @@ export default {
             tracks: [],
             search: null,
             innerWidth: null,
-            playlistName: null
+            playlistName: null,
+            showAddTracks: false,
+            trackName: null,
+            suggestionTracks: []
         }
     },
     computed: {
@@ -96,8 +141,19 @@ export default {
             }, function(err) {
                 self.displayFeedback(err)
             });
-        }
-        
+        },
+        addTrack() {
+
+        },
+        querySearchAsync() {
+            const self = this;
+            spotifyApi.searchTracks(this.trackName)
+            .then(function(data) {
+                self.suggestionTracks = data.tracks.items
+            }, function(err) {
+                self.displayFeedback(err)
+            });
+        },
     },
 
     mounted () {
@@ -118,8 +174,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-
-.margin-15-0{
-    margin: 15px 0;
-}
+    .margin-15-0{
+        margin: 15px 0;
+    }
+    .right {
+        float: right;
+    }
 </style>

@@ -39,7 +39,7 @@
             <el-input
                 v-model="playlistName"
                 clearable
-                autofocus="true">
+                autofocus=true>
             </el-input> 
             <span slot="footer" class="dialog-footer">
                 <el-button @click="showCreatePlaylist = false">Cancel</el-button>
