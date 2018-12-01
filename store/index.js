@@ -21,10 +21,9 @@ const createStore = () => {
     },
     
     actions: {
-      displayFeedback({commit},code) {
-        var aux = '';
+      displayFeedback({commit}, req) {
         let list_codes = {
-            "200":	"OK - The request has succeeded. The client can read the result of the request in the body and the headers of the response.",
+            "200":	"OK",
             "201":	"Created - The request has been fulfilled and resulted in a new resource being created.",
             "202":	"Accepted - The request has been accepted for processing, but the processing has not been completed.",
             "204":	"No Content - The request has succeeded but returns no message body.",
@@ -38,17 +37,28 @@ const createStore = () => {
             "502":	"Bad Gateway - The server was acting as a gateway or proxy and received an invalid response from the upstream server.",
             "503":	"Service Unavailable - The server is currently unable to handle the request due to a temporary condition which will be alleviated after some delay. You can choose to resend the request again.",
         }
-        if(list_codes[code]) {
-            aux = `${list_codes[code]}`
+
+        let type = 'error';
+        let message = '';
+
+        if (req.status == '200' || req.status == '201') {
+          type = 'success'
+        }
+
+        if (list_codes[req.status]) {
+          message = `${list_codes[req.status]}`
         } else {
-            aux = `Ops, somenthing went wrong! Please, contact support.`
+          message = `Ops, somenthing went wrong! Please, contact support.`
         }
-        if (code == '200' || code == '201') {
-          $nuxt.$emit('SHOW_ALERT', {type: 'success', text: aux});
+
+        let resp = req.response? JSON.parse(req.response): true;
+        
+        if (resp.error && resp.error.message) {
+          message = resp.error.message
         }
-        $nuxt.$emit('SHOW_ALERT', {type: 'error', text: aux});
-    }
-      
+
+        $nuxt.$emit('SHOW_ALERT', {type: type, text: message});
+      }
     },
 
     getters:{

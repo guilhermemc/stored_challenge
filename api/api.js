@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
   var state = makeid();
   var client_id = process.env.CLIENT_ID;
   // res.cookie(stateKey, state);
-  var scope = 'user-read-private user-read-email playlist-read-private playlist-read-collaborative'
+  var scope = 'user-read-private user-read-email playlist-read-private playlist-read-collaborative playlist-modify-public playlist-modify-private '
   res.redirect('https://accounts.spotify.com/authorize?' +
     queryString.stringify({
       response_type: 'code',

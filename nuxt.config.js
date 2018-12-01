@@ -1,8 +1,6 @@
 const pkg = require('./package')
 var moment = require('moment');
 require('dotenv').config()
-const Spotify = require('spotify-web-api-js');
-const spotifyApi = new Spotify();
 
 module.exports = {
   mode: 'universal',
@@ -31,7 +29,8 @@ module.exports = {
   ** Global CSS
   */
   css: [
-    'element-ui/lib/theme-chalk/index.css'
+    'element-ui/lib/theme-chalk/index.css',
+    'element-ui/lib/theme-chalk/display.css'
   ],
 
   /*

@@ -1,7 +1,7 @@
 <template>
     <section class="container">
         <el-row type="flex" class="row-bg" justify="center">
-            <el-col :span="18">
+            <el-col :span="22">
                 <paginated-list :list-data="playlists"/>
             </el-col>
         </el-row>
@@ -11,7 +11,6 @@
 <script>
 import {mapMutations, mapGetters,mapActions} from 'vuex'
 import PaginatedList from '~/components/PaginatedList.vue'
-
 const Spotify = require('spotify-web-api-js');
 const spotifyApi = new Spotify();
 

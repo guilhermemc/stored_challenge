@@ -18,7 +18,7 @@
     "moment": "^2.22.2",
     "nuxt": "^2.0.0",
     "request": "^2.88.0",
-    "spotify-web-api-js": "^1.1.1"
+    "spotify-web-api-js": "git+https://github.com/BarbaraMonedeiro/spotify-api-js.git"
   },
   "devDependencies": {
     "eslint-config-prettier": "^3.1.0",

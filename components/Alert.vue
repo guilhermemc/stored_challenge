@@ -1,8 +1,8 @@
 <template>
     <div>
         <el-row type="flex" class="row-bg row-alert" justify="center">
-            <el-col :span="16">
-                <el-alert v-show="display" :type="type" show-icon :title="text"></el-alert>
+            <el-col>
+                <el-alert v-show="display" :type="type" show-icon :title="text" @close="display = false"></el-alert>
             </el-col>
         </el-row>
     </div>
@@ -25,12 +25,15 @@ export default {
     },
     beforeDestroy() {
         this.$nuxt.$off('SHOW_ALERT');
+            this.display = false;
     },
 }
 </script>
 <style lang="scss" scoped>
     .row-alert {
         position: absolute;
-        z-index: 2
+        z-index: 2;
+        width: 90%;
+        margin: 1% 5%;
     }
 </style>

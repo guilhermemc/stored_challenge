@@ -1,9 +1,9 @@
 <template>
     <div class="list">
         <el-row type="flex wrap" class="row-bg" style="display: flex; flex-wrap: wrap;" justify="space-around" :gutter="20">
-            <el-col class="col-card" :xs="24" :sm="8" :md="8" :lg="8" :xl="8" v-for="playlist in paginatedData" :key="playlist.id">
+            <el-col class="col-card" :xs="24" :sm="8" :md="8" :lg="6" :xl="6" v-for="playlist in paginatedData" :key="playlist.id">
                 <el-card class="card-playlist" :body-style="{ padding: '0px' }" v-on:click.native="getTracks(playlist.id)">
-                    <img :src="playlist.images[0].url" class="image">
+                    <img v-if="playlist.images[0]" :src="playlist.images[0].url" class="image">
                     <div style="padding: 14px;">
                         <span>{{playlist.name}}</span>
                         <div class="bottom clearfix">
@@ -13,32 +13,58 @@
                 </el-card>
             </el-col>
         </el-row>
-        <el-button-group class="center">
-            <el-button type="primary" icon="el-icon-arrow-left"  @click="prevPage" :disabled="pageNumber==0">
-                Previous Page
-            </el-button>
-            <el-button type="primary" @click="nextPage" :disabled="pageNumber > pageCount -1">
-                Next Page
-                <i class="el-icon-arrow-right el-icon-right"></i>
-            </el-button>
-        </el-button-group>
+        <el-row type="flex" class="row-bg" justify="space-around">
+            <el-col :span="12">
+                <el-button type="success" icon="el-icon-plus" @click="showCreatePlaylist = true">
+                     Create Playlist
+                     </el-button>
+            </el-col>
+            <el-col :span="12">
+                <el-button-group class="right">
+                    <el-button type="primary" icon="el-icon-arrow-left"  @click="prevPage" :disabled="pageNumber==0">
+                        Previous Page
+                    </el-button>
+                    <el-button type="primary" @click="nextPage" :disabled="pageNumber > pageCount -1">
+                        Next Page
+                        <i class="el-icon-arrow-right el-icon-right"></i>
+                    </el-button>
+                </el-button-group>
+                </el-col>
+        </el-row>
+        <el-dialog
+            title="Name your playlist"
+            :visible.sync="showCreatePlaylist"
+            width="50%"
+            :before-close="closeCreatePlaylist">
+            <el-input
+                v-model="playlistName"
+                clearable
+                autofocus="true">
+            </el-input> 
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="showCreatePlaylist = false">Cancel</el-button>
+                <el-button type="primary" @click="createPlaylist()">Save</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 <script>
-import {mapMutations, mapActions} from 'vuex'
+import {mapMutations, mapActions, mapGetters} from 'vuex'
 const Spotify = require('spotify-web-api-js');
 const spotifyApi = new Spotify();
 export default {
     data() {
         return {
             pageNumber: 0,
+            showCreatePlaylist: false,
+            playlistName: ''
         }
     },
     props:{
-        listData:{
-            type:Array,
-            required:true
-        },
+        // listData:{
+        //     type:Array,
+        //     required:true
+        // },
         size:{
             type:Number,
             required:false,
@@ -46,19 +72,21 @@ export default {
         }
     },
     computed: {
+        ...mapGetters(['playlists']),
         pageCount(){
-            let l = this.listData.length,
+            let l = this.playlists.length,
                 s = this.size;
             return Math.floor(l/s);
         },
         paginatedData(){
             const start = this.pageNumber * this.size,
                 end = start + this.size;
-            return this.listData.slice(start, end);
+            return this.playlists.slice(start, end);
         }
     },
     methods : {
-        ...mapMutations(['SET_TRACKS']),
+        ...mapMutations(['SET_PLAYLISTS']),
+        ...mapActions(['displayFeedback']),
         nextPage(){
             this.pageNumber++;
         },
@@ -67,6 +95,36 @@ export default {
         },
         getTracks(playlistId) {
             this.$router.push('playlists/'+playlistId+'/tracks');
+        },
+        closeCreatePlaylist(done) {
+            this.$confirm('Are you sure?')
+            .then(_ => {
+                done();
+            })
+            .catch(_ => {});
+        },
+        createPlaylist() {
+            this.showCreatePlaylist = false
+            spotifyApi.setAccessToken(localStorage.getItem('accessToken'));
+
+            const self = this;
+            spotifyApi.createPlaylist({name: this.playlistName})
+            .then(function(data) {
+                console.log(data)
+                // self.tracks = data.items
+                if (data.req.status == 201) {
+                    spotifyApi.getUserPlaylists()
+                    .then(function(data) {
+                        self.SET_PLAYLISTS(data.items)
+                        self.displayFeedback(data.req)
+                    }, function(err) {
+                        self.displayFeedback(err.status)
+                    });
+                    self.getTracks(data.id)
+                }
+            }, function(err) {
+                self.displayFeedback(err)
+            });
         }
     },
 }
@@ -115,12 +173,14 @@ export default {
     cursor: pointer;
   }
   .col-card{
+    min-width: 200px;
+    max-width: 400px;
     flex: 1 0 33%;
     align-items: stretch;
     margin-bottom: 15px;
   }
-  .center {
-      display: flex;
-      justify-content: center;
+  .right {
+    display: flex;
+    justify-content: flex-end;
   }
 </style>

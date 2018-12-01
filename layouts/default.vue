@@ -17,7 +17,7 @@
     },
     components: {
       Alert,
-      VueMenu
+      VueMenu,
     },
     computed: {
       showMenu: function () {
