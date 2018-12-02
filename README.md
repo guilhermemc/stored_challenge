@@ -32,8 +32,8 @@ npm run dev
 
 * [Nuxt](https://nuxtjs.org) - The framework used
 * [Element.ui](http://element.eleme.io/#/en-US) - The UX framework
-* [Spotify Web API JS](https://github.com/JMPerez/spotify-web-api-js) - Wrapper for the Spotify Web API - with few [adaptations] (https://github.com/BarbaraMonedeiro/spotify-api-js)
+* [Spotify Web API JS](https://github.com/JMPerez/spotify-web-api-js) - Wrapper for the Spotify Web API - with few [adaptations](https://github.com/BarbaraMonedeiro/spotify-api-js)
 
 ## Authors
 
-* **Bárbara Monedeiro** - [Git] (https://github.com/BarbaraMonedeiro)
+* **Bárbara Monedeiro** - [Git](https://github.com/BarbaraMonedeiro)
