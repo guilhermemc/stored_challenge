@@ -36,4 +36,4 @@ npm run dev
 
 ## Authors
 
-* **Bárbara Monedeiro** - [Git] (https://github.com/BarbaraMonedeiro)
+* **Bárbara Monedeiro** - [Git](https://github.com/BarbaraMonedeiro)
