@@ -29,7 +29,7 @@ export default {
     },
 }
 </script>
-<style lang="scss" scoped>
+<style lang="sass" scoped>
     .row-alert {
         position: absolute;
         z-index: 10000;
