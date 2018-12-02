@@ -5,9 +5,10 @@
   "author": "Barbara Monedeiro",
   "private": true,
   "scripts": {
-    "dev": "npm run dev",
-    "build": "npm build",
-    "start": "npm star"
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.0.0",
