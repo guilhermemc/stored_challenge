@@ -10,7 +10,10 @@
         <el-row type="flex" class="row-bg" justify="center">
             <el-col :span="22">
                 <div class="margin-15-0">
-                    <h1>{{playlistName}}</h1>
+                    <h1>
+                        {{playlistName}}
+                        <el-button class="edit-name" type="text" icon="el-icon-edit" @click="showChangeName = true"></el-button>
+                    </h1>
                 </div>
                 <div class="list">
                     <el-table
@@ -41,7 +44,6 @@
                         <el-table-column
                             align="right">
                             <template slot-scope="scope">
-                                <!-- <el-button size="mini" type="primary" icon="el-icon-edit" circle @click="handleEdit(scope.$index, scope.row)"></el-button> -->
                                 <el-button size="mini" type="danger" icon="el-icon-delete" circle @click="handleDelete(scope.$index, scope.row)"></el-button>
                             </template>
                         </el-table-column>
@@ -52,36 +54,59 @@
         <el-dialog
             title="Add Track to Playlist"
             :visible.sync="showAddTracks"
-            width="70%">
-            <input type="text" v-model="trackName" v-on:keyup="querySearchAsync">
+            width="70%"
+            :before-close="handleAddTrack">
+            <input type="text"
+                class="search-input"
+                v-model="trackName"
+                v-on:keyup="querySearchAsync"
+                placeholder="Search by name ..."
+            >
             <div>
                 <el-table
-                        stripe
-                        row-key="id"
-                        :data="suggestionTracks"
-                        style="width: 100%">
-                        <el-table-column
-                            label="Name"
-                            prop="name">
-                        </el-table-column>
-                        <el-table-column
-                        label="Artists">
-                            <template slot-scope="scope">
-                                <div slot="reference" class="name-wrapper">
-                                    {{ getArtists(scope.row.artists) }}
-                                </div>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                            align="right">
-                            <template slot-scope="scope">
-                                <el-button size="mini" type="success" icon="el-icon-check" plain round @click="addTrack(scope.$index, scope.row)">Add</el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
+                    stripe
+                    row-key="id"
+                    :data="suggestionTracks"
+                    style="width: 100%">
+                    <el-table-column
+                        label="Name"
+                        prop="name">
+                    </el-table-column>
+                    <el-table-column
+                    label="Artists">
+                        <template slot-scope="scope">
+                            <div slot="reference" class="name-wrapper">
+                                {{ getArtists(scope.row.artists) }}
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        align="right">
+                        <template slot-scope="scope">
+                            <el-button v-if="!belongsToPlaylist(scope.row.id)" size="mini" type="success" icon="el-icon-plus" plain round @click="addTrack(scope.$index, scope.row)">Add</el-button>
+
+                            <el-button v-else disabled size="mini" type="success" icon="el-icon-check" plain round @click="addTrack(scope.$index, scope.row)">Already Added</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
             </div>
             <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="showAddTracks = false">Done</el-button>
+                <el-button type="primary" @click="showAddTracks = false; trackName = null;suggestionTracks = []">Done</el-button>
+            </span>
+        </el-dialog>
+        <el-dialog
+            title="Name your playlist"
+            :visible.sync="showChangeName"
+            width="50%"
+            :before-close="closeChangeName">
+            <el-input
+                v-model="playlistNewName"
+                clearable
+                autofocus=true>
+            </el-input>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="showChangeName = false">Cancel</el-button>
+                <el-button type="primary" @click="changeName">Save</el-button>
             </span>
         </el-dialog>
     </section>  
@@ -99,6 +124,8 @@ export default {
             innerWidth: null,
             playlistName: null,
             showAddTracks: false,
+            showChangeName: false,
+            playlistNewName: null,
             trackName: null,
             suggestionTracks: []
         }
@@ -142,18 +169,59 @@ export default {
                 self.displayFeedback(err)
             });
         },
-        addTrack() {
-
-        },
-        querySearchAsync() {
+        addTrack(index, row) {
             const self = this;
-            spotifyApi.searchTracks(this.trackName)
+            spotifyApi.addTracksToPlaylist(this.$route.params.id,[row.uri])
             .then(function(data) {
-                self.suggestionTracks = data.tracks.items
+                if (data.req.status == '201') {
+                    self.getPlaylistTracks();
+                };
+                self.displayFeedback(data.req)
             }, function(err) {
                 self.displayFeedback(err)
             });
         },
+        querySearchAsync() {
+            const self = this;
+            if (this.trackName) {
+                spotifyApi.searchTracks(this.trackName)
+                .then(function(data) {
+                    self.suggestionTracks = data.tracks.items
+                }, function(err) {
+                    self.displayFeedback(err)
+                });
+            }
+        },
+        handleAddTrack(){
+            this.trackName = null
+            this.suggestionTracks = []
+            this.showAddTracks = false
+        },
+        closeChangeName(){
+            this.showChangeName = false
+            this.playlistNewName = null
+        },
+        belongsToPlaylist(id) {
+            let aux = this.tracks.filter((track) => {
+                return track.track.id === id
+            });
+
+            if (aux != '')
+                return true;
+
+            return false;
+        },
+        changeName() {
+            const self = this;
+            console.log(this.playlistNewName)
+            spotifyApi.changePlaylistDetails(this.$route.params.id,{name: this.playlistNewName})
+            .then(function(data) {
+                self.playlistName = self.playlistNewName
+                self.showChangeName = false;
+            }, function(err) {
+                self.displayFeedback(err)
+            });
+        }
     },
 
     mounted () {
@@ -179,5 +247,36 @@ export default {
     }
     .right {
         float: right;
+    }
+    .search-input {
+        -webkit-appearance: none;
+        background-color: #fff;
+        background-image: none;
+        border-radius: 4px;
+        border: 1px solid #dcdfe6;
+        box-sizing: border-box;
+        color: #606266;
+        display: inline-block;
+        font-size: inherit;
+        height: 40px;
+        line-height: 40px;
+        outline: 0;
+        padding: 0 15px;
+        transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+        width: 100%;
+
+        &:hover {
+            border-color: #c0c4cc;
+        }
+        &:focus {
+            border-color:#409EFF;
+        }
+    }
+    .edit-name {
+        margin-left: 25px;
+        color:#909399;
+        &:hover {
+            color:#409EFF;
+        }
     }
 </style>

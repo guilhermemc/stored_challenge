@@ -32,7 +32,7 @@ export default {
 <style lang="scss" scoped>
     .row-alert {
         position: absolute;
-        z-index: 2;
+        z-index: 10000;
         width: 90%;
         margin: 1% 5%;
     }

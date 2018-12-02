@@ -24,7 +24,7 @@ const createStore = () => {
       displayFeedback({commit}, req) {
         let list_codes = {
             "200":	"OK",
-            "201":	"Created - The request has been fulfilled and resulted in a new resource being created.",
+            "201":	"OK",
             "202":	"Accepted - The request has been accepted for processing, but the processing has not been completed.",
             "204":	"No Content - The request has succeeded but returns no message body.",
             "304":	"Not Modified. See Conditional requests.",

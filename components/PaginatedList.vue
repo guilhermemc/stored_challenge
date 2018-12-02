@@ -61,10 +61,6 @@ export default {
         }
     },
     props:{
-        // listData:{
-        //     type:Array,
-        //     required:true
-        // },
         size:{
             type:Number,
             required:false,
@@ -110,8 +106,6 @@ export default {
             const self = this;
             spotifyApi.createPlaylist({name: this.playlistName})
             .then(function(data) {
-                console.log(data)
-                // self.tracks = data.items
                 if (data.req.status == 201) {
                     spotifyApi.getUserPlaylists()
                     .then(function(data) {
