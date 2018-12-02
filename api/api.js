@@ -24,7 +24,8 @@ app.get('/', (req, res) => {
       client_id: client_id,
       scope: scope,
       redirect_uri: process.env.BASE_URL + '/api/callback',
-      state: state
+      state: state,
+      show_dialog: 'true'
       })
     );
   }

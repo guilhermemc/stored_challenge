@@ -1,53 +1,63 @@
 <template>
     <div>
-        <el-menu
-            :default-active="activeIndex"
-            class="el-menu-demo"
-            mode="horizontal"
-            @select="handleSelect">
-            <el-menu-item vue-router="true" index="/playlists">Playlists</el-menu-item>
-            <el-menu-item class="right" index="logout">Logout</el-menu-item>
-        </el-menu>
+        <el-row>
+            <el-col :span="24" class="menu">
+                <nuxt-link to="/playlists">
+                    <div class="menu-item" :class="$route.name =='playlists'?'active':''">Playlists</div>
+                </nuxt-link>
+                <div class="menu-item right" @click="logout">Logout</div>
+            </el-col>
+        </el-row>
     </div>
 </template>
 <script>
 export default {
     data() {
         return {
-            activeIndex: '/playlists'
         }
     },
     methods: {
-        handleSelect(key, keyPath) {
-            if (key == 'logout') {
-                localStorage.removeItem('accessToken');
-                localStorage.setItem('accessToken', null);
-                localStorage.clear();
-                sessionStorage.clear();
-
-                this.deleteAllCookies();
-                this.$router.push('/');
-                this.activeIndex = '/playlists';
-            } else if (key == '/playlists') {
-                this.$router.push(key);
-            }
-        },
-        deleteAllCookies() {
-            var cookies = document.cookie.split(";");
-            console.log(cookies)
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = cookies[i];
-                var eqPos = cookie.indexOf("=");
-                var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-                document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-            }
+        logout() {
+            localStorage.clear();
+            sessionStorage.clear();
+            this.$router.push('/');
         }
     }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+    .menu-item {
+        float: left;
+        height: 60px;
+        line-height: 60px;
+        margin: 0;
+        border-bottom: 2px solid transparent;
+        position: relative;
+        -webkit-box-sizing: border-box;
+        white-space: nowrap;
+        list-style: none;
+        font-size: 14px;
+        color: #606266;
+        padding: 0 20px;
+        cursor: pointer;
+        transition: border-color .3s,background-color .3s,color .3s;
+        box-sizing: border-box;
+        .disabled {
+            color: #909399;
+        }
+        &:hover {
+            color: #303133
+        }
+    }
+    .menu {
+        border-bottom: #DCDFE6 1px solid;
+    }
     .right{
         float: right;
+    }
+    .active{
+        border-bottom: 2px solid #409EFF !important;
+        color: #303133 !important;
     }
 </style>

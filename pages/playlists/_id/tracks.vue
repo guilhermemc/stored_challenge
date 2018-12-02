@@ -54,7 +54,7 @@
         <el-dialog
             title="Add Track to Playlist"
             :visible.sync="showAddTracks"
-            width="70%"
+            :width="innerWidth > 424?'70%':'90%'"
             :before-close="handleAddTrack">
             <input type="text"
                 class="search-input"
@@ -81,11 +81,11 @@
                         </template>
                     </el-table-column>
                     <el-table-column
-                        align="right">
+                        :align="innerWidth > 424?'right':'center'">
                         <template slot-scope="scope">
-                            <el-button v-if="!belongsToPlaylist(scope.row.id)" size="mini" type="success" icon="el-icon-plus" plain round @click="addTrack(scope.$index, scope.row)">Add</el-button>
+                            <el-button v-if="!belongsToPlaylist(scope.row.id)" size="mini" type="success" icon="el-icon-plus" :round="innerWidth > 424" :circle="innerWidth < 425" @click="addTrack(scope.$index, scope.row)">{{innerWidth > 424?'Add':''}}</el-button>
 
-                            <el-button v-else disabled size="mini" type="success" icon="el-icon-check" plain round @click="addTrack(scope.$index, scope.row)">Already Added</el-button>
+                            <el-button v-else disabled size="mini" type="success" icon="el-icon-check" plain :round="innerWidth > 424" :circle="innerWidth < 425" @click="addTrack(scope.$index, scope.row)">{{innerWidth > 424?'Already Added':''}}</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
