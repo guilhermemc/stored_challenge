@@ -26,7 +26,7 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
+<style lang="scss" scoped>
     .menu-item {
         float: left;
         height: 60px;

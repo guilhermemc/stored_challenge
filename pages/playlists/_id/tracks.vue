@@ -241,7 +241,7 @@ export default {
     }
 }
 </script>
-<style lang="sass" scoped>
+<style lang="scss" scoped>
     .margin-15-0{
         margin: 15px 0;
     }
