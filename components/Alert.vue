@@ -35,7 +35,7 @@ export default {
 </script>
 <style lang="scss" scoped>
     .row-alert {
-        position: absolute;
+        position: fixed;
         z-index: 10000;
         width: 90%;
         margin: 1% 5%;
