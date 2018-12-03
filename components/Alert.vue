@@ -21,12 +21,16 @@ export default {
             this.type = data.type;
             this.text = data.text;
             this.display = true;
-        });
+            setTimeout(
+                _ => this.display = false,
+                5000
+            )
+        })
     },
     beforeDestroy() {
         this.$nuxt.$off('SHOW_ALERT');
             this.display = false;
-    },
+    }
 }
 </script>
 <style lang="scss" scoped>

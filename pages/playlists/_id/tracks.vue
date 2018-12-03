@@ -83,9 +83,9 @@
                     <el-table-column
                         :align="innerWidth > 424?'right':'center'">
                         <template slot-scope="scope">
-                            <el-button v-if="!belongsToPlaylist(scope.row.id)" size="mini" type="success" icon="el-icon-plus" :round="innerWidth > 424" :circle="innerWidth < 425" @click="addTrack(scope.$index, scope.row)">{{innerWidth > 424?'Add':''}}</el-button>
+                            <el-button class="btn-track" v-if="!belongsToPlaylist(scope.row.id)" size="mini" type="success" icon="el-icon-plus" :round="innerWidth > 424" :circle="innerWidth < 425" @click="addTrack(scope.$index, scope.row)">{{innerWidth > 424?' Add':''}}</el-button>
 
-                            <el-button v-else disabled size="mini" type="success" icon="el-icon-check" plain :round="innerWidth > 424" :circle="innerWidth < 425" @click="addTrack(scope.$index, scope.row)">{{innerWidth > 424?'Already Added':''}}</el-button>
+                            <el-button class="btn-track" v-else disabled size="mini" type="success" icon="el-icon-check" plain :round="innerWidth > 424" :circle="innerWidth < 425" @click="addTrack(scope.$index, scope.row)">{{innerWidth > 424?' Already Added':''}}</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -169,6 +169,15 @@ export default {
                 self.displayFeedback(err)
             });
         },
+        getPlaylistDetails() {
+            const self = this;
+            spotifyApi.getPlaylist(this.$route.params.id)
+            .then(function(data) {
+                self.playlistName = data.name;
+            }, function(err) {
+                self.displayFeedback(err)
+            });
+        },
         addTrack(index, row) {
             const self = this;
             spotifyApi.addTracksToPlaylist(this.$route.params.id,[row.uri])
@@ -213,7 +222,6 @@ export default {
         },
         changeName() {
             const self = this;
-            console.log(this.playlistNewName)
             spotifyApi.changePlaylistDetails(this.$route.params.id,{name: this.playlistNewName})
             .then(function(data) {
                 self.playlistName = self.playlistNewName
@@ -226,8 +234,10 @@ export default {
 
     mounted () {
         spotifyApi.setAccessToken(localStorage.getItem('accessToken'));
+        this.getPlaylistDetails();
         this.getPlaylistTracks();
 
+        this.innerWidth = window.innerWidth
         this.$nextTick(() => {
             window.addEventListener('resize', () => {
                 this.innerWidth = window.innerWidth
@@ -278,5 +288,9 @@ export default {
         &:hover {
             color:#409EFF;
         }
+    }
+
+    /deep/ .btn-track [class*=el-icon-]+span {
+        margin-left: 0px !important;
     }
 </style>
