@@ -25,7 +25,7 @@ npm install
 And after
 
 ```
-npm run dev
+npm run dev -- --port 3000
 ```
 
 ## Built With
