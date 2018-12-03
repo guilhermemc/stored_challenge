@@ -61,6 +61,7 @@
                 v-model="trackName"
                 v-on:keyup="querySearchAsync"
                 placeholder="Search by name ..."
+                autofocus
             >
             <div>
                 <el-table
@@ -101,8 +102,7 @@
             :before-close="closeChangeName">
             <el-input
                 v-model="playlistNewName"
-                clearable
-                autofocus=true>
+                clearable>
             </el-input>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="showChangeName = false">Cancel</el-button>
